@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,19 @@ public class DemoController {
 	}
 
 
+	@GetMapping("/getAllUsers")
+	public ResponseEntity<List<UserDto>> getAllUsers() {
+		List<User> users = userRepository.findAll();
+		List<UserDto> userDtos = users.stream().map(user -> {
+			UserDto userDto = new UserDto();
+			userDto.setId(user.getId());
+			userDto.setName(user.getName());
+			userDto.setEmail(user.getEmail());
+			userDto.setPhone(user.getPhone());
+			return userDto;
+		}).toList();
+		return new ResponseEntity<>(userDtos, HttpStatus.OK);
+	}
 	
 
 }
